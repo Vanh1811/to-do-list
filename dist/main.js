@@ -6,28 +6,121 @@
  * or disable the default devtool with "devtool: false".
  * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
  */
-/******/ (() => {
-  // webpackBootstrap
-  /******/ var __webpack_modules__ = {
-    /***/ "./src/index.js":
-      /*!**********************!*\
+/******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
+/******/ 	var __webpack_modules__ = ({
+
+/***/ "./src/display.js":
+/*!************************!*\
+  !*** ./src/display.js ***!
+  \************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   notesDisplay: () => (/* binding */ notesDisplay),\n/* harmony export */   removeNote: () => (/* binding */ removeNote),\n/* harmony export */   removeTask: () => (/* binding */ removeTask),\n/* harmony export */   showNotesDisplay: () => (/* binding */ showNotesDisplay),\n/* harmony export */   showProjectDisplay: () => (/* binding */ showProjectDisplay),\n/* harmony export */   showTaskDisplay: () => (/* binding */ showTaskDisplay),\n/* harmony export */   showTaskInfo: () => (/* binding */ showTaskInfo),\n/* harmony export */   todoDisplay: () => (/* binding */ todoDisplay),\n/* harmony export */   toggleTab: () => (/* binding */ toggleTab)\n/* harmony export */ });\nfunction toggleTab (clickedTab) {\n  const tabs = document.querySelectorAll('.tab')\n  const mainTaskList = document.querySelector('.taskList')\n  tabs.forEach(function (tab) {\n    tab.classList.remove('active')\n    mainTaskList.innerHTML = ''\n  })\n\n  clickedTab.classList.add('active')\n\n  const projectType = clickedTab.textContent\n  showProjectDisplay(projectType)\n}\n\nconst todoDisplay = (function () {\n  const display = []\n\n  return { display }\n})()\n\nconst notesDisplay = (function () {\n  const display = []\n\n  return { display }\n})()\n\nfunction showTaskDisplay () {\n  const mainTaskList = document.querySelector('.taskList')\n\n  for (let i = 0; i < todoDisplay.display.length; i++) {\n    const div = document.createElement('div')\n    div.classList.add('task')\n\n    const title = document.createElement('p')\n    title.classList.add('taskTitle')\n    title.textContent = todoDisplay.display[i].title\n    div.appendChild(title)\n\n    if ('proj' in todoDisplay.display[i]) {\n      const projCategory = document.createElement('p')\n      projCategory.classList.add('projTitle')\n      projCategory.textContent = todoDisplay.display[i].proj\n      div.appendChild(projCategory)\n      console.log(todoDisplay.display[i].proj)\n    }\n\n    const date = document.createElement('p')\n    date.classList.add('dueDate')\n    date.textContent = todoDisplay.display[i].dueDate\n    div.appendChild(date)\n\n    const checkBtn = document.createElement('button')\n    checkBtn.classList.add('checkBtn')\n    div.appendChild(checkBtn)\n\n    mainTaskList.appendChild(div)\n  }\n  return mainTaskList\n}\n\n// Showing Display for Certain Project\nfunction showProjectDisplay (projectType) {\n  for (let i = 0; i < todoDisplay.display.length; i++) {\n    if ('proj' in todoDisplay.display[i]) {\n      if (todoDisplay.display[i].proj === projectType) {\n        const mainTaskList = document.querySelector('.taskList')\n\n        const div = document.createElement('div')\n        div.classList.add('task')\n\n        const title = document.createElement('p')\n        title.classList.add('taskTitle')\n        title.textContent = todoDisplay.display[i].title\n        div.appendChild(title)\n\n        const date = document.createElement('p')\n        date.classList.add('dueDate')\n        date.textContent = todoDisplay.display[i].dueDate\n        div.appendChild(date)\n\n        const checkBtn = document.createElement('button')\n        checkBtn.classList.add('checkBtn')\n        div.appendChild(checkBtn)\n\n        mainTaskList.appendChild(div)\n        return mainTaskList\n      }\n    }\n  }\n}\n\nfunction removeTask (task) {\n  const indexToRemove = todoDisplay.display.findIndex(item => item.title === task)\n\n  if (indexToRemove !== -1) {\n    todoDisplay.display.splice(indexToRemove, 1)\n    showTaskDisplay()\n    console.log(todoDisplay.display)\n  }\n}\n\nfunction removeNote (note) {\n  const indexToRemove = notesDisplay.display.findIndex(item => item.description === note)\n\n  if (indexToRemove !== -1) {\n    notesDisplay.display.splice(indexToRemove, 1)\n    showNotesDisplay()\n    console.log(notesDisplay.display)\n  }\n}\n\nlet isTaskInfoDisplayed = false\n\nfunction showTaskInfo (title, description, dueDate, priority) {\n  const div = document.createElement('div')\n  div.classList.add('taskInfo')\n\n  const cancelBtn = document.createElement('button')\n  cancelBtn.textContent = 'X'\n  cancelBtn.classList.add('cancel')\n  cancelBtn.addEventListener('click', () => {\n    div.remove()\n    isTaskInfoDisplayed = false\n  })\n  div.appendChild(cancelBtn)\n\n  const ptitle = document.createElement('p')\n  ptitle.textContent = 'Task : '\n\n  const titleSpan = document.createElement('span')\n  titleSpan.textContent = title\n  ptitle.appendChild(titleSpan)\n\n  div.appendChild(ptitle)\n\n  const pdesc = document.createElement('p')\n  pdesc.textContent = 'Description : '\n\n  const descSpan = document.createElement('span')\n  descSpan.textContent = description\n  pdesc.appendChild(descSpan)\n\n  div.appendChild(pdesc)\n\n  const pdate = document.createElement('p')\n  pdate.textContent = 'Due Date : '\n\n  const dateSpan = document.createElement('span')\n  dateSpan.textContent = dueDate\n  pdate.appendChild(dateSpan)\n\n  div.appendChild(pdate)\n\n  const ppriority = document.createElement('p')\n  ppriority.textContent = 'Priority : '\n\n  const prioritySpan = document.createElement('span')\n  prioritySpan.textContent = priority\n  ppriority.appendChild(prioritySpan)\n\n  div.appendChild(ppriority)\n\n  return div\n}\n\nconst taskList = document.querySelector('.taskList')\n\ntaskList.addEventListener('click', function (event) {\n  if (event.target.classList.contains('task')) {\n    const task = event.target\n    const taskTitle = task.querySelector('.taskTitle').textContent\n    const indexOfTodo = todoDisplay.display.findIndex(item => item.title === taskTitle)\n    const targetTask = todoDisplay.display[indexOfTodo]\n    console.log(targetTask)\n    if (!isTaskInfoDisplayed) {\n      const body = document.querySelector('body')\n      body.appendChild(showTaskInfo(targetTask.title, targetTask.description, targetTask.dueDate, targetTask.priority))\n      isTaskInfoDisplayed = true\n    }\n  }\n})\n\nfunction showNotesDisplay () {\n  const mainTaskList = document.querySelector('.taskList')\n  for (let i = 0; i < notesDisplay.display.length; i++) {\n    const noteDisplay = document.createElement('div')\n    noteDisplay.classList.add('notesDisplay')\n\n    const cancelBtn = document.createElement('button')\n    cancelBtn.classList.add('cancelNotes')\n    cancelBtn.textContent = 'X'\n    noteDisplay.appendChild(cancelBtn)\n\n    const description = document.createElement('p')\n    description.textContent = notesDisplay.display[i].description\n    noteDisplay.appendChild(description)\n\n    mainTaskList.appendChild(noteDisplay)\n  }\n  return mainTaskList\n}\n\n\n//# sourceURL=webpack://to_do_list/./src/display.js?");
+
+/***/ }),
+
+/***/ "./src/index.js":
+/*!**********************!*\
   !*** ./src/index.js ***!
   \**********************/
-      /***/ () => {
-        eval("\n\n//# sourceURL=webpack://to_do_list/./src/index.js?");
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-        /***/
-      },
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _todo_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./todo.js */ \"./src/todo.js\");\n/* harmony import */ var _project_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./project.js */ \"./src/project.js\");\n/* harmony import */ var _display_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./display.js */ \"./src/display.js\");\n/* harmony import */ var _notes_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./notes.js */ \"./src/notes.js\");\n\n\n\n\n\ndocument.querySelectorAll('.tab').forEach(tab => {\n  tab.addEventListener('click', function () {\n    (0,_display_js__WEBPACK_IMPORTED_MODULE_2__.toggleTab)(this)\n  })\n})\n\nconst addButton = document.querySelector('.add')\n\nconst todoTab = document.getElementById('todo')\n\nconst addProjectBtn = document.querySelector('.projBtn')\n\nconst taskList = document.querySelector('.taskList')\n\nconst notesTab = document.querySelector('.note')\n\naddButton.addEventListener('click', function () {\n  if (notesTab.classList.contains('active')) {\n    (0,_notes_js__WEBPACK_IMPORTED_MODULE_3__.showNotesForm)()\n  } else {\n    (0,_todo_js__WEBPACK_IMPORTED_MODULE_0__.toggleTodoDisplay)()\n  }\n})\n\ntodoTab.addEventListener('click', _display_js__WEBPACK_IMPORTED_MODULE_2__.showTaskDisplay)\n\naddProjectBtn.addEventListener('click', _project_js__WEBPACK_IMPORTED_MODULE_1__.showProjectForm)\n\ntaskList.addEventListener('click', function (event) {\n  if (event.target.classList.contains('checkBtn')) {\n    const parent = event.target.parentNode\n    const task = parent.querySelector('.taskTitle').textContent\n    taskList.innerHTML = ''\n    ;(0,_display_js__WEBPACK_IMPORTED_MODULE_2__.removeTask)(task)\n  }\n})\n\ntaskList.addEventListener('click', function (event) {\n  if (event.target.classList.contains('cancelNotes')) {\n    const parent = event.target.parentNode\n    const note = parent.querySelector('p').textContent\n    taskList.innerHTML = ''\n    ;(0,_display_js__WEBPACK_IMPORTED_MODULE_2__.removeNote)(note)\n  }\n})\n\nnotesTab.addEventListener('click', function (event) {\n  ;(0,_display_js__WEBPACK_IMPORTED_MODULE_2__.showNotesDisplay)()\n})\n\n\n//# sourceURL=webpack://to_do_list/./src/index.js?");
 
-    /******/
-  };
-  /************************************************************************/
-  /******/
-  /******/ // startup
-  /******/ // Load entry module and return exports
-  /******/ // This entry module can't be inlined because the eval devtool is used.
-  /******/ var __webpack_exports__ = {};
-  /******/ __webpack_modules__["./src/index.js"]();
-  /******/
-  /******/
-})();
+/***/ }),
+
+/***/ "./src/notes.js":
+/*!**********************!*\
+  !*** ./src/notes.js ***!
+  \**********************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   AddNote: () => (/* binding */ AddNote),\n/* harmony export */   Note: () => (/* binding */ Note),\n/* harmony export */   createNote: () => (/* binding */ createNote),\n/* harmony export */   createNoteForm: () => (/* binding */ createNoteForm),\n/* harmony export */   showNotesForm: () => (/* binding */ showNotesForm)\n/* harmony export */ });\n/* harmony import */ var _display__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./display */ \"./src/display.js\");\n\n\nclass Note {\n  constructor (description) {\n    this.description = description\n  }\n}\n\nfunction createNote (description) {\n  return new Note(description)\n}\n\nlet isNotesFormDisplayed = false\n\nfunction createNoteForm () {\n  const noteDiv = document.createElement('div')\n  noteDiv.classList.add('notesForm')\n\n  const form = document.createElement('form')\n\n  const label = document.createElement('label')\n  label.textContent = 'Enter Note : '\n  form.appendChild(label)\n\n  const input = document.createElement('input')\n  input.type = 'text'\n  form.appendChild(input)\n\n  const inputBtns = document.createElement('div')\n\n  const inputAdd = document.createElement('input')\n  inputAdd.type = 'button'\n  inputAdd.value = 'Add Note'\n\n  inputAdd.addEventListener('click', function () {\n    AddNote(createNote(input.value))\n    noteDiv.remove()\n    isNotesFormDisplayed = false\n    console.log(_display__WEBPACK_IMPORTED_MODULE_0__.notesDisplay.display)\n  })\n\n  inputBtns.appendChild(inputAdd)\n\n  const inputCancel = document.createElement('input')\n  inputCancel.type = 'button'\n  inputCancel.value = 'Cancel'\n\n  inputCancel.addEventListener('click', function () {\n    noteDiv.remove()\n    isNotesFormDisplayed = false\n  })\n\n  inputBtns.appendChild(inputCancel)\n\n  inputBtns.classList.add('noteInputBtns')\n  form.appendChild(inputBtns)\n\n  noteDiv.appendChild(form)\n\n  return noteDiv\n}\n\nfunction showNotesForm () {\n  if (!isNotesFormDisplayed) {\n    const body = document.querySelector('body')\n    body.appendChild(createNoteForm())\n    isNotesFormDisplayed = true\n  }\n}\n\nfunction AddNote (note) {\n  _display__WEBPACK_IMPORTED_MODULE_0__.notesDisplay.display.push(note)\n\n  const noteDisplay = document.createElement('div')\n  noteDisplay.classList.add('notesDisplay')\n\n  const cancelBtn = document.createElement('button')\n  cancelBtn.classList.add('cancelNotes')\n  cancelBtn.textContent = 'X'\n  noteDisplay.appendChild(cancelBtn)\n\n  const description = document.createElement('p')\n  description.textContent = note.description\n  noteDisplay.appendChild(description)\n\n  const mainTaskList = document.querySelector('.taskList')\n  mainTaskList.appendChild(noteDisplay)\n\n  return mainTaskList\n}\n\n\n//# sourceURL=webpack://to_do_list/./src/notes.js?");
+
+/***/ }),
+
+/***/ "./src/project.js":
+/*!************************!*\
+  !*** ./src/project.js ***!
+  \************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   addProjectToList: () => (/* binding */ addProjectToList),\n/* harmony export */   createProject: () => (/* binding */ createProject),\n/* harmony export */   createProjectTask: () => (/* binding */ createProjectTask),\n/* harmony export */   projectInput: () => (/* binding */ projectInput),\n/* harmony export */   removeProject: () => (/* binding */ removeProject),\n/* harmony export */   showProjectForm: () => (/* binding */ showProjectForm)\n/* harmony export */ });\n/* harmony import */ var _todo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./todo */ \"./src/todo.js\");\n/* harmony import */ var _display__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./display */ \"./src/display.js\");\n\n\n\n// Creating Project Category\nfunction createProject (proj) {\n  const p = document.createElement('p')\n  p.classList.add('tab')\n  p.classList.add('proj')\n  p.textContent = proj\n\n  const projContainer = document.querySelector('.projects')\n  projContainer.appendChild(p)\n\n  projContainer.addEventListener('click', function (event) {\n    if (event.target.classList.contains('tab')) {\n      (0,_display__WEBPACK_IMPORTED_MODULE_1__.toggleTab)(event.target)\n    }\n  })\n\n  return { proj }\n}\n\nfunction createProjectTask (proj, title, description, dueDate, priority) {\n  return new _todo__WEBPACK_IMPORTED_MODULE_0__.Project(proj, title, description, dueDate, priority)\n}\n\nfunction addProjectToList () {\n  const projectTab = document.querySelector('.tab.proj.active')\n  const project = createProjectTask(projectTab.textContent, document.getElementById('task').value, document.getElementById('description').value,\n    document.getElementById('dueDate').value, document.getElementById('priority').value)\n\n  _display__WEBPACK_IMPORTED_MODULE_1__.todoDisplay.display.push(project)\n\n  // creating dynamic task\n  const mainTaskList = document.querySelector('.taskList')\n\n  const div = document.createElement('div')\n  div.classList.add('task')\n\n  const title = document.createElement('p')\n  title.classList.add('taskTitle')\n  title.textContent = project.title\n  div.appendChild(title)\n\n  const date = document.createElement('p')\n  date.classList.add('dueDate')\n  date.textContent = project.dueDate\n  div.appendChild(date)\n\n  const checkBtn = document.createElement('button')\n  checkBtn.classList.add('checkBtn')\n  div.appendChild(checkBtn)\n\n  mainTaskList.appendChild(div)\n\n  return mainTaskList\n}\n\nlet isProjFormDisplayed = false\n\nfunction projectInput () {\n  const projForm = document.createElement('div')\n\n  const label1 = document.createElement('label')\n  label1.setAttribute('for', 'project')\n  label1.textContent = 'Enter Your Project:'\n  projForm.appendChild(label1)\n\n  const input1 = document.createElement('input')\n  input1.type = 'text'\n  input1.id = 'project'\n  input1.placeholder = 'Enter project name'\n  input1.setAttribute('required', true)\n  projForm.appendChild(input1)\n\n  const inputBtns = document.createElement('div')\n\n  const inputAdd = document.createElement('input')\n  inputAdd.type = 'button'\n  inputAdd.value = 'Add Project'\n\n  inputAdd.addEventListener('click', () => {\n    const requiredInputs = projForm.querySelectorAll('[required]')\n    let isValid = true\n\n    requiredInputs.forEach(input => {\n      if (!input.value.trim()) {\n        isValid = false\n      }\n    })\n\n    if (isValid) {\n      createProject(input1.value)\n      form.remove()\n      isProjFormDisplayed = false\n    }\n  })\n\n  inputBtns.appendChild(inputAdd)\n\n  const inputCancel = document.createElement('input')\n  inputCancel.type = 'button'\n  inputCancel.value = 'Cancel'\n\n  inputCancel.addEventListener('click', () => {\n    form.remove()\n    isProjFormDisplayed = false\n  })\n\n  inputBtns.appendChild(inputCancel)\n  inputBtns.classList.add('inputBtns')\n  projForm.appendChild(inputBtns)\n  projForm.classList.add('projectInputContainer')\n\n  const form = document.createElement('form')\n  form.appendChild(projForm)\n\n  return form\n}\n\nfunction showProjectForm () {\n  if (!isProjFormDisplayed) {\n    const body = document.querySelector('body')\n    body.appendChild(projectInput())\n    isProjFormDisplayed = true\n  }\n}\n\nfunction removeProject (projectType) {\n  for (let i = _display__WEBPACK_IMPORTED_MODULE_1__.todoDisplay.display.length - 1; i >= 0; i--) {\n    if ('proj' in _display__WEBPACK_IMPORTED_MODULE_1__.todoDisplay.display[i] && _display__WEBPACK_IMPORTED_MODULE_1__.todoDisplay.display[i].proj === projectType) {\n      _display__WEBPACK_IMPORTED_MODULE_1__.todoDisplay.display.splice(i, 1)\n    }\n  }\n}\n\n\n//# sourceURL=webpack://to_do_list/./src/project.js?");
+
+/***/ }),
+
+/***/ "./src/todo.js":
+/*!*********************!*\
+  !*** ./src/todo.js ***!
+  \*********************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   AddTodoToList: () => (/* binding */ AddTodoToList),\n/* harmony export */   Project: () => (/* binding */ Project),\n/* harmony export */   Todo: () => (/* binding */ Todo),\n/* harmony export */   TodoInput: () => (/* binding */ TodoInput),\n/* harmony export */   createTodo: () => (/* binding */ createTodo),\n/* harmony export */   isFormDisplayed: () => (/* binding */ isFormDisplayed),\n/* harmony export */   toggleTodoDisplay: () => (/* binding */ toggleTodoDisplay)\n/* harmony export */ });\n/* harmony import */ var _display__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./display */ \"./src/display.js\");\n/* harmony import */ var _project__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./project */ \"./src/project.js\");\n\n\n\nclass Todo {\n  constructor (title, description, dueDate, priority) {\n    this.title = title\n    this.description = description\n    this.dueDate = dueDate\n    this.priority = priority\n  }\n}\n\nclass Project extends Todo {\n  constructor (proj, title, description, dueDate, priority) {\n    super(title, description, dueDate, priority)\n    this.proj = proj\n  }\n}\n\nfunction createTodo (title, description, dueDate, priority) {\n  return new Todo(title, description, dueDate, priority)\n}\n\nlet isFormDisplayed = false\n\nfunction TodoInput () {\n  const formContainer = document.createElement('div')\n\n  const label1 = document.createElement('label')\n  label1.setAttribute('for', 'task')\n  label1.textContent = 'Task:'\n  formContainer.appendChild(label1)\n\n  const input1 = document.createElement('input')\n  input1.type = 'text'\n  input1.id = 'task'\n  input1.placeholder = 'Enter task'\n  input1.setAttribute('required', true)\n  input1.addEventListener('input', function () {\n    if (this.value.length > 17) {\n      this.value = this.value.slice(0, 17)\n    }\n  })\n  formContainer.appendChild(input1)\n\n  const label2 = document.createElement('label')\n  label2.setAttribute('for', 'description')\n  label2.textContent = 'Description:'\n  formContainer.appendChild(label2)\n\n  const input2 = document.createElement('input')\n  input2.type = 'text'\n  input2.id = 'description'\n  input2.placeholder = 'Enter description'\n  input2.setAttribute('required', true)\n  input2.addEventListener('input', function () {\n    if (this.value.length > 75) {\n      this.value = this.value.slice(0, 75)\n    }\n  })\n  formContainer.appendChild(input2)\n\n  const label3 = document.createElement('label')\n  label3.setAttribute('for', 'dueDate')\n  label3.textContent = 'Due Date:'\n  formContainer.appendChild(label3)\n\n  const input3 = document.createElement('input')\n  input3.type = 'date'\n  input3.id = 'dueDate'\n  input3.placeholder = 'Enter due date'\n  input3.setAttribute('required', true)\n  formContainer.appendChild(input3)\n\n  const label4 = document.createElement('label')\n  label4.setAttribute('for', 'priority')\n  label4.textContent = 'Priority:'\n  formContainer.appendChild(label4)\n\n  const selectPriority = document.createElement('select')\n  selectPriority.id = 'priority'\n\n  const option1 = document.createElement('option')\n  option1.value = ''\n  option1.disabled = true\n  option1.selected = true\n  option1.textContent = 'Select Priority'\n  selectPriority.appendChild(option1)\n\n  const option2 = document.createElement('option')\n  option2.value = 'high'\n  option2.textContent = 'High'\n  selectPriority.appendChild(option2)\n\n  const option3 = document.createElement('option')\n  option3.value = 'medium'\n  option3.textContent = 'Medium'\n  selectPriority.appendChild(option3)\n\n  const option4 = document.createElement('option')\n  option4.value = 'low'\n  option4.textContent = 'Low'\n  selectPriority.appendChild(option4)\n\n  formContainer.appendChild(selectPriority)\n\n  const inputBtns = document.createElement('div')\n\n  const inputSubmit = document.createElement('input')\n  inputSubmit.type = 'button'\n  inputSubmit.value = 'Add To List'\n\n  inputSubmit.addEventListener('click', () => {\n    const requiredInputs = formContainer.querySelectorAll('[required]')\n    let isValid = true\n\n    requiredInputs.forEach(input => {\n      if (!input.value.trim()) {\n        isValid = false\n      }\n    })\n    if (isValid) {\n      const projContainer = document.querySelector('.projects')\n      const projectTab = projContainer.querySelector('.tab.proj.active')\n      if (projectTab) {\n        console.log(projectTab.textContent)\n        ;(0,_project__WEBPACK_IMPORTED_MODULE_1__.addProjectToList)()\n      } else {\n        AddTodoToList()\n      }\n      form.remove()\n      isFormDisplayed = false\n    }\n  })\n\n  inputBtns.appendChild(inputSubmit)\n\n  const inputCancel = document.createElement('input')\n  inputCancel.type = 'button'\n  inputCancel.value = 'Cancel'\n  inputCancel.addEventListener('click', () => {\n    form.remove()\n    isFormDisplayed = false\n  })\n  inputBtns.appendChild(inputCancel)\n\n  inputBtns.classList.add('inputBtns')\n  formContainer.appendChild(inputBtns)\n  formContainer.classList.add('formContainer')\n\n  const form = document.createElement('form')\n  form.appendChild(formContainer)\n\n  return form\n}\n\nfunction toggleTodoDisplay () {\n  if (!isFormDisplayed) {\n    const body = document.querySelector('body')\n    body.appendChild(TodoInput())\n    isFormDisplayed = true\n  }\n}\n\n\n\nfunction AddTodoToList () {\n  const todo = createTodo(document.getElementById('task').value, document.getElementById('description').value,\n    document.getElementById('dueDate').value, document.getElementById('priority').value)\n\n  _display__WEBPACK_IMPORTED_MODULE_0__.todoDisplay.display.push(todo)\n\n  const mainTaskList = document.querySelector('.taskList')\n\n  const div = document.createElement('div')\n  div.classList.add('task')\n\n  const title = document.createElement('p')\n  title.classList.add('taskTitle')\n  title.textContent = todo.title\n  div.appendChild(title)\n\n  const date = document.createElement('p')\n  date.classList.add('dueDate')\n  date.textContent = todo.dueDate\n  div.appendChild(date)\n\n  const checkBtn = document.createElement('button')\n  checkBtn.classList.add('checkBtn')\n  div.appendChild(checkBtn)\n\n  mainTaskList.appendChild(div)\n\n  return mainTaskList\n}\n\n\n//# sourceURL=webpack://to_do_list/./src/todo.js?");
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/************************************************************************/
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module can't be inlined because the eval devtool is used.
+/******/ 	var __webpack_exports__ = __webpack_require__("./src/index.js");
+/******/ 	
+/******/ })()
+;
